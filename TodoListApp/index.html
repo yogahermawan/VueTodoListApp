@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TodoListApp</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+  <div class="container" id="app">
+    <div class="form-group">
+      <h1 style="text-align: center">Todo List App</h1>
+      {{todo}} <br/> <hr/>
+      <input type="text" class="form-control" placeholder="todo . . " v-model="todo" @keyup.enter="addTodo">
+
+      <table class="table" v-if="todos.length > 0">
+        <thead>
+          <tr>
+            <th scope="col">Nomer e</th>
+            <th scope="col">Todo</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody v-for="(todo, index) in todos" ::key="index">
+            <!-- ini ada JS ekspresionnya -->
+          <td scope="row">{{index+1}}</td> 
+          <td>{{todo}}</td>
+          <td>
+            <button class="btn btn-danger" @click="deleteTodo(index)">Delete</button>
+          </td>
+        </tbody>
+      </table>
+      <div v-else class="alert alert-danger">Weh kosong COK!</div>
+    </div>
+  </div>
+</body>
+<script src="vue.js"></script>
+
+<script>
+  var app = new Vue({
+    el:'#app',
+    data(){
+      return{
+        todos: [],
+        todo: ""
+      }
+    },
+    methods: {
+      addTodo(){
+        this.todos.push(this.todo);
+        this.todo = "";
+      },
+      deleteTodo(index){
+        this.todos.splice(index, 1);
+      }
+    },
+    watch: {
+      todos(){
+        localStorage.setItem("todos",
+                              JSON.stringify(this.todos));
+      }
+    },
+    created() {
+      this.localStorage();
+    },
+  })
+</script>
+</html>
